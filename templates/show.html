@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ user.full_name }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ user.full_name }}</h1>
+
+<img src="{{ user.image_url }}" alt="User Image">
+
+<p><strong>First Name:</strong> {{ user.first_name }}</p>
+<p><strong>Last Name:</strong> {{ user.last_name }}</p>
+
+<a href="{{ user.id }}/edit">Edit</a>
+<a href="{{ user.id }}/delete">Delete</a>
+{% endblock %}

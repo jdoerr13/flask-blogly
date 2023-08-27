@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>
+    Blogly – {% block title %}{% endblock %}
+  </title>
+</head>
+
+<body>
+  <nav>
+    <a href="/">Blogly</a>
+    <ul>
+      <li> <a href="/users">Users</a></li>
+    </ul>
+  </nav>
+
+  <div>
+    {% block content %}
+    <!-- Content from other templates will be inserted here -->
+    {% endblock %}
+  </div>
+</body>
+
+</html>
