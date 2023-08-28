@@ -12,6 +12,9 @@
 <p><strong>First Name:</strong> {{ user.first_name }}</p>
 <p><strong>Last Name:</strong> {{ user.last_name }}</p>
 
-<a href="{{ user.id }}/edit">Edit</a>
-<a href="{{ user.id }}/delete">Delete</a>
+<form method="POST" action="/users/{{ user.id }}/delete" onsubmit="return confirm('Are you sure you want to delete this user?');">
+    <button type="submit">Delete</button>
+    <a href="/users/{{ user.id }}/edit">Edit</a>
+    <a href="/users">Back to Users</a>
+  </form>
 {% endblock %}

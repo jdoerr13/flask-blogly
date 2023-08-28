@@ -83,7 +83,18 @@ def users_edit(user_id):
     user.last_name = request.form['last_name']
     user.image_url = request.form['image_url']
     
+    db.session.add(user)
     db.session.commit()
 
     return redirect("/users")
 
+@app.route('/users/<int:user_id>/delete', methods=["POST"])
+def users_delete(user_id):
+    """Delete the user"""
+    
+    user = User.query.get_or_404(user_id)
+    
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect("/users")
