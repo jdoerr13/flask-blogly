@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>
-    Blogly – {% block title %}{% endblock %}
+    Blogly &ndash; {% block title %}{% endblock %}
   </title>
 </head>
-
 <body>
-  <nav>
-    <a href="/">Blogly</a>
-    <ul>
-      <li> <a href="/users">Users</a></li>
-    </ul>
-  </nav>
+<nav>
+  <a href="/">Blogly</a>
+  <ul>
+    <li><a href="/users">Users</a></li>
+  </ul>
+  <ul>
+    <li>
+      <a href="/users/new">Add user</a>
+    </li>
+  </ul>
+</nav>
+<div>
+  {% for msg in get_flashed_messages() %}
+  <div>{{ msg }}</div>
+  {% endfor %}
 
-  <div>
-    {% block content %}
-    <!-- Content from other templates will be inserted here -->
-    {% endblock %}
-  </div>
+  {% block content %}
+  <!-- put the content here -->
+  {% endblock %}
+</div>
 </body>
-
 </html>

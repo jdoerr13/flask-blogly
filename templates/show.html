@@ -1,20 +1,47 @@
 {% extends 'base.html' %}
 
-{% block title %}
-{{ user.full_name }}
-{% endblock %}
+{% block title %}{{ user.full_name }}{% endblock %}
 
 {% block content %}
-<h1>{{ user.full_name }}</h1>
 
-<img src="{{ user.image_url }}" alt="User Image">
+<div class="row">
 
-<p><strong>First Name:</strong> {{ user.first_name }}</p>
-<p><strong>Last Name:</strong> {{ user.last_name }}</p>
+  {% if user.image_url %}
+  <div>
+    <img src="{{ user.image_url }}"
+         alt="{{ user.full_name }}">
+  </div>
+  {% endif %}
 
-<form method="POST" action="/users/{{ user.id }}/delete" onsubmit="return confirm('Are you sure you want to delete this user?');">
-    <button type="submit">Delete</button>
-    <a href="/users/{{ user.id }}/edit">Edit</a>
-    <a href="/users">Back to Users</a>
-  </form>
+  <div>
+    <h1>{{ user.full_name }}</h1>
+
+    <form>
+      <button formaction="/users/{{ user.id }}/edit"
+              formmethod="GET">Edit
+      </button>
+      <button formaction="/users/{{ user.id }}/delete"
+              formmethod="POST">Delete
+      </button>
+    </form>
+
+    <h2>Posts</h2>
+
+    <ul>
+      {% for post in user.posts %}
+      <li>
+        <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+        <small>{{ post.friendly_date }}</small>
+        <a href="/users/{{ user.id }}" class="btn btn-outline-info">Back</a>
+        <a href="/posts/{{ post.id }}/edit" class="btn btn-outline-primary">Edit</a>
+        <button formmethod="POST" formaction="/posts/{{ post.id }}/delete" class="btn btn-outline-danger">Delete</button>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <p><a href="/users/{{ user.id }}/posts/new">Add Post</a></p>
+
+  </div>
+</div>
+
 {% endblock %}

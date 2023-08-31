@@ -1,8 +1,9 @@
 """Blogly application."""
 
-from flask import Flask, request, redirect, render_template
-from models import db, connect_db, User
+from flask import Flask, request, redirect, render_template, flash
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -23,8 +24,9 @@ db.create_all()
 @app.route('/')
 def root():
     """Homepage redirects to list of users."""
-
-    return redirect("/users")
+    post = Post.query.order_by(Post.created_at.desc()).all()
+    # return redirect("/users")
+    return render_template('homepage.html', post=post)
 
 
 @app.route('/users')
@@ -98,3 +100,43 @@ def users_delete(user_id):
     db.session.commit()
 
     return redirect("/users")
+
+#______________________________________
+@app.route('/users/<int:user_id>/posts/new', methods=["GET"])
+def posts_new_form(user_id):
+    """Show a form to create a new post for a specific user"""
+    user = User.query.get_or_404(user_id)
+    print("Inside posts_new_form")
+    print("User:", user)  # Print user information for debugging
+    return render_template('new_post.html', user=user)
+
+@app.route('/users/<int:user_id>/posts/new', methods=["POST"])
+def posts_new(user_id):
+    """Handle form submission for creating a new post for a specific user"""
+    user = User.query.get_or_404(user_id)
+
+    print("Form Data:")
+    print("Title:", request.form['title'])
+    print("Content:", request.form['content'])
+    new_post = Post(title=request.form['title'],
+                    content=request.form['content'],
+                    created_at=datetime.now(),
+                    user_id=user.id)
+
+    db.session.add(new_post)
+    db.session.commit()
+    flash(f"Post '{new_post.title}' added.")
+
+    return redirect(f"/users/{user_id}")
+
+@app.route('/posts/<int:post_id>')
+def posts_show(post_id):
+    """Show a page with info on a specific post"""
+    post = Post.query.get_or_404(post_id)
+    return render_template('show.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit', methods=["GET"])
+def posts_edit(post_id):
+    """Show a form to edit an existing post"""
+    post = Post.query.get_or_404(post_id)
+    return render_template('edit_post.html', post=post)
