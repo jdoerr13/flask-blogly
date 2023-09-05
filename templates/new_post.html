@@ -8,7 +8,7 @@
 
 <form method="POST">
 
-  <div class="form-group row">
+  <div>
     <label for="title">Title</label>
     <div>
         <!-- title in name for the submission of the form. -->
@@ -22,6 +22,21 @@
       <textarea name="content"></textarea>
     </div>
   </div>
+
+
+  <div >{% for tag in tags %}<div>
+      <input type="checkbox"
+             value="{{ tag.id }}"
+             name="tags">
+      <label for="tag_{{ tag.id }}">
+        {{ tag.name }}
+      </label>
+    </div>
+    {% endfor %}
+  </div>
+
+
+
 
   <div>
     <div>

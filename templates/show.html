@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="row">
+<div>
 
   {% if user.image_url %}
   <div>
@@ -17,10 +17,10 @@
     <h1>{{ user.full_name }}</h1>
 
     <form>
-      <button formaction="/users/{{ user.id }}/edit"
+      <button formaction="{{ user.id }}/edit"
               formmethod="GET">Edit
       </button>
-      <button formaction="/users/{{ user.id }}/delete"
+      <button formaction="{{ user.id }}/delete"
               formmethod="POST">Delete
       </button>
     </form>
@@ -28,18 +28,31 @@
     <h2>Posts</h2>
 
     <ul>
-      {% for post in user.posts %}
+      {% for user_post in posts %}
       <li>
-        <a href="/posts/{{ post.id }}">{{ post.title }}</a>
-        <small>{{ post.friendly_date }}</small>
-        <a href="/users/{{ user.id }}" class="btn btn-outline-info">Back</a>
-        <a href="/posts/{{ post.id }}/edit" class="btn btn-outline-primary">Edit</a>
-        <button formmethod="POST" formaction="/posts/{{ post.id }}/delete" class="btn btn-outline-danger">Delete</button>
+        <a href="{{ user_post.id }}">{{ user_post.title }}</a>
+        <small>{{ user_post.friendly_date }}</small>
+        <form action="{{ user.id }}/edit_post/{{ user_post.id }}"  method="GET">
+          <button type="submit">Edit</button>
+        </form>
+       <form action="{{ user.id }}/posts/{{ user_post.id }}/delete" method="POST">
+          <button type="submit">Delete</button>
+        </form>
+  
+        <p>
+          <b>Tags:</b>
+          <a href="/tags/new"><button>Add Tag</button></a>
+          {% if user_post.tags %}
+          {% for tag in user_post.tags %}
+          <a href="/tags/{{ tag.id }}"><i>{{ tag.name }}</i></a>
+          {% endfor %}
+        </p>
+        {% endif %}
       </li>
       {% endfor %}
     </ul>
 
-    <p><a href="/users/{{ user.id }}/posts/new">Add Post</a></p>
+    <p><a href="{{ user.id }}/posts/new">Add Post</a></p>
 
   </div>
 </div>
